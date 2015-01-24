@@ -1,7 +1,9 @@
-var ws = new WebSocket("ws://127.0.0.1:8000/chat");
+var ws = new WebSocket("ws://127.0.0.1:8000/ws");
 
 ws.onmessage = function (evt) {
-   $('#start').after('<p>' + evt.data + '</p>')
+    $('.table > tbody:last').append('<tr><td>' + evt.data + '</td></tr>');
+    var n = $(document).height();
+    $('html, body').animate({ scrollTop: n });
 };
 
 $('#msg_form').submit(function(){
