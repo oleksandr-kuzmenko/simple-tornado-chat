@@ -16,7 +16,7 @@ class Application(tornado.web.Application):
         handlers = [
             (r'/', MainHandler),
             (r'/chat', ChatHandler),
-            (r'/ws', WebSocketHandler),
+            (r'/ws/(.*)', WebSocketHandler),
             (r'/login', LoginHandler),
             (r'/logout', LogoutHandler),
         ]
@@ -55,19 +55,22 @@ class ChatHandler(BaseHandler):
 
 
 class WebSocketHandler(BaseHandler, tornado.websocket.WebSocketHandler):
-    connections = set()
+    rooms = dict()
 
-    def open(self):
-        WebSocketHandler.connections.add(self)
+    def open(self, room):
+        self.room = str(room)
+        if not self.room in WebSocketHandler.rooms:
+            WebSocketHandler.rooms[self.room] = set()
+        WebSocketHandler.rooms[self.room].add(self)
 
     def on_close(self):
-        WebSocketHandler.connections.remove(self)
+        WebSocketHandler.rooms[self.room].remove(self)
 
     def on_message(self, msg):
         self.send_messages(msg)
 
     def send_messages(self, msg):
-        for conn in self.connections:
+        for conn in self.rooms[self.room]:
             conn.write_message('{}: {}'.format(self.current_user, msg))
         
 

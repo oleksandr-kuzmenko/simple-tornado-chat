@@ -24,3 +24,11 @@ body {
   height: 60px;
   background-color: #f5f5f5;
 }
+
+.fixed {
+        position: fixed;
+}
+.scrollit {
+        float: right;
+        width: 70%
+}
