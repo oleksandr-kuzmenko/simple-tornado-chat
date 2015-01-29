@@ -68,8 +68,8 @@ class WebSocketHandler(BaseHandler, tornado.websocket.WebSocketHandler):
 
     def send_messages(self, msg):
         for conn in self.connections:
-            conn.write_message('{}: {}'.format(self.current_user, msg))
-        
+            conn.write_message({'name': self.current_user, 'msg': msg})
+
 
 class LoginHandler(tornado.web.RequestHandler, tornado.auth.TwitterMixin):
     @tornado.gen.coroutine
