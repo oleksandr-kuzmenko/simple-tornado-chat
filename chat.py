@@ -6,9 +6,8 @@ import tornado.websocket
 import tornado.auth
 import tornado.gen
 
-from tornado.options import define, options, parse_command_line
-
-define('port', default=8000, help='run on the given port', type=int)
+# from tornado.options import define, options, parse_command_line
+# define('port', default=8000, help='run on the given port', type=int)
 
 
 class Application(tornado.web.Application):
@@ -89,9 +88,10 @@ class LogoutHandler(tornado.web.RequestHandler):
 
 
 def main():
-    parse_command_line()
+    # parse_command_line()
+    port = int(os.environ.get("PORT", 5000))
     app = Application()
-    app.listen(options.port)
+    app.listen(port)
     tornado.ioloop.IOLoop.instance().start()
 
 
